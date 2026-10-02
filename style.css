@@ -97,8 +97,8 @@ body::after {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #7f628f;
-  box-shadow: 0 0 9px 3px rgba(126, 96, 145, .62), 0 0 18px 5px rgba(197, 159, 207, .28);
+  background: #d8cce5;
+  box-shadow: 0 0 8px 2px rgba(180, 160, 200, .35), 0 0 18px 5px rgba(197, 159, 207, .28);
   opacity: 0;
   animation: fireflyFloat var(--duration) ease-in-out infinite;
   will-change: transform, opacity;
