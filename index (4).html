@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="madhuwrites — a dreamy little home for poems, letters and things left unsaid.">
+<title>madhuwrites ✦ poetry under moonlight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="fireflies" aria-hidden="true"></div>
+
+<header class="nav" aria-label="Site navigation">
+  <a href="#home" class="nav-brand"><span>☾</span> madhuwrites</a>
+  <nav>
+    <a href="#home">Home</a><a href="#poems">Poems</a><a href="#about">About</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a>
+  </nav>
+  <button class="music-btn" id="musicButton" type="button" onclick="toggleMusic()">♫ <span>music</span></button>
+</header>
+<audio id="bgMusic" loop><source src="music.mp3" type="audio/mpeg"></audio>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-accessible">
+    <p>A little corner for the dreams, the unspoken and the in-between.</p>
+    <h1>madhuwrites</h1>
+    <a href="#poems">Explore My Poems</a>
+  </div>
+  <!-- The visual is intentionally image-led to match the fairytale reference exactly. -->
+  <a class="hero-cta-hotspot" href="#poems" aria-label="Explore My Poems"></a>
+</section>
+
+<section class="poems" id="poems">
+  <div class="section-title">
+    <span>✦</span><h2>Featured Poems</h2><span>✦</span>
+    <p>little pieces of longing, love, grief, hope &amp; everything between</p>
+  </div>
+  <div class="poem-tools"><div id="poemCount"></div><div id="filterPills"></div></div>
+  <div class="poem-grid" id="poemGrid"></div>
+</section>
+
+<section class="interlude">
+  <div class="lantern">✦</div><div class="lantern two">✦</div>
+  <p>Some feelings are better<br><em>written than said.</em></p>
+</section>
+
+<section class="paper-section" id="gallery">
+  <div class="paper-heading"><span>little fragments</span><h2>Notes from the <em>in-between.</em></h2><p>Letters, photographs, half-finished thoughts and little memories.</p></div>
+  <div class="memory-grid">
+    <article><span>☾</span><h3>same sky</h3><p>different places.</p></article>
+    <article><span>✿</span><h3>soft beginnings</h3><p>pages waiting to bloom.</p></article>
+    <article><span>✧</span><h3>unsaid things</h3><p>the words that stayed.</p></article>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-tulips" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="about-copy"><span>about madhuwrites</span><h2>A garden for<br><em>unspoken things.</em></h2><p>This little corner turns ordinary skies into metaphors, thoughts into poems, and feelings into somewhere they can stay.</p><p class="signature">— Madhu ♡</p></div>
+</section>
+
+<section class="contact" id="contact"><div><span>one last little thing</span><h2>Stay for a while.</h2><p>There is always another poem somewhere around here.</p><a href="#poems">wander back to the poems ✦</a></div></section>
+</main>
+
+<footer><strong>madhuwrites ✦</strong><p>made of words, moonlight &amp; a little bit of wonder</p></footer>
+
+<div class="modal" id="poemModal" onclick="closePoem(event)"><div class="modal-box" onclick="event.stopPropagation()"><button onclick="closePoem()" aria-label="Close">×</button><span>from the poetry shelf</span><h2 id="modalTitle"></h2><div id="modalText"></div></div></div>
+
+<script src="poems.js"></script>
+<script>
+const fireflyLayer=document.querySelector('.fireflies');
+for(let i=0;i<38;i++){
+ const f=document.createElement('span'); f.className='firefly';
+ f.style.left=(Math.random()*100)+'%'; f.style.top=(8+Math.random()*86)+'%';
+ f.style.setProperty('--drift',((Math.random()*90)-45)+'px');
+ f.style.setProperty('--duration',(5+Math.random()*8)+'s');
+ f.style.setProperty('--delay',(Math.random()*9)+'s');
+ f.style.setProperty('--size',(2.5+Math.random()*3)+'px'); fireflyLayer.appendChild(f);
+}
+const grid=document.getElementById('poemGrid'), pills=document.getElementById('filterPills'), count=document.getElementById('poemCount'); let active='all';
+function filters(){const cats=['all',...new Set(poems.map(p=>p.category))]; pills.innerHTML=cats.map(c=>`<button class="pill ${c===active?'active':''}" onclick="setCategory('${c.replace(/'/g,"\\'")}')">${c}</button>`).join('')}
+function render(){const list=active==='all'?poems:poems.filter(p=>p.category===active); count.textContent=`${list.length} ${list.length===1?'poem':'poems'}`; grid.innerHTML=list.map((p,i)=>`<article class="poem-card"><div class="card-top"><span>${String(poems.indexOf(p)+1).padStart(2,'0')}</span><span>${p.category}</span></div><div class="symbol">${p.symbol}</div><h3>${p.title}</h3><p>${p.excerpt}</p><button onclick='openPoem(${JSON.stringify(p.title)},${JSON.stringify(p.poem)})'>open poem →</button></article>`).join('')}
+function setCategory(c){active=c;filters();render()}
+function openPoem(t,p){document.getElementById('modalTitle').textContent=t;document.getElementById('modalText').textContent=p;document.getElementById('poemModal').classList.add('show');document.body.classList.add('locked')}
+function closePoem(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('poemModal').classList.remove('show');document.body.classList.remove('locked')}
+const music=document.getElementById('bgMusic'), btn=document.getElementById('musicButton');
+function toggleMusic(){if(music.paused){music.play().then(()=>{btn.classList.add('playing');btn.innerHTML='♫ <span>Now Playing</span> Ⅱ'}).catch(()=>alert('Add music.mp3 to this folder first.'))}else{music.pause();btn.classList.remove('playing');btn.innerHTML='♫ <span>music</span>'}}
+filters();render();
+</script>
+</body>
+</html>
